@@ -216,15 +216,40 @@ Many of this was taken from https://github.com/styleguide/ruby, https://github.c
     object.method(arg)
     ```
 
-* Multi-line method chaining
+* Multi-line method chaining: put points at the end of lines and methods on new lines. If using any newlines put every method to a new line
     ```Ruby
     # bad
     foo.bar.qux
       .baz
-
-    # good
+    
+    # better
     foo.bar.qux.
       baz
+    
+    # ok
+    foo.bar.qux.baz
+    
+    # bad
+    foo.bar.qux.baz.bla.blub.first.last.all.includes(:myself).order(:left)
+
+    # bad
+    foo.bar.qux.baz.bla.
+      blub.first.last.
+      all.includes(:myself).
+      order(:left)
+    
+    # good
+    foo.
+      bar.
+      qux.
+      baz.
+      bla.
+      blub.
+      first.
+      last.
+      all.
+      includes(:myself).
+      order(:left)
     ```
 
 * Avoid the usage of `is_` or `has_` at the beginning of method names.
