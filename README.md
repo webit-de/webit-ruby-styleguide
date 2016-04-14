@@ -216,19 +216,33 @@ Many of this was taken from https://github.com/styleguide/ruby, https://github.c
     object.method(arg)
     ```
 
+*  Method defininitions and calls: brackets around parameters are not necessary. If no brackets are used new lines should be indented with 4 spaces.
+    ```Ruby
+    # good
+    object.method arg
+    object.method(arg)
+
+    # bad
+    object.method arg1, arg2, arg3,
+      arg4, arg5, arg6
+
+    # good
+    object.method arg1, arg2, arg3,
+        arg4, arg5, arg6
+    ```
 * Multi-line method chaining: put points at the end of lines and methods on new lines. If using any newlines put every method to a new line
     ```Ruby
     # bad
     foo.bar.qux
       .baz
-    
+
     # better
     foo.bar.qux.
       baz
-    
+
     # ok
     foo.bar.qux.baz
-    
+
     # bad
     foo.bar.qux.baz.bla.blub.first.last.all.includes(:myself).order(:left)
 
@@ -237,7 +251,7 @@ Many of this was taken from https://github.com/styleguide/ruby, https://github.c
       blub.first.last.
       all.includes(:myself).
       order(:left)
-    
+
     # good
     foo.
       bar.
@@ -282,6 +296,22 @@ Many of this was taken from https://github.com/styleguide/ruby, https://github.c
       # ...
     end
     ```
+* Use named parameters for methods with optional parameters (only for projects using Ruby 2.0 or greater)
+  ```Ruby
+  # bad (ok for ruby < 2.0)
+  def foo(options = {})
+    bar = options.fetch(:bar, 'default')
+    puts bar
+  end
+
+  # good
+  def foo(bar: 'default')
+    puts bar
+  end
+
+  # foo => 'default'
+  # foo(bar: 'baz') => 'baz'
+  ```  
 
 * Long argument line in method call
     ```Ruby
@@ -444,6 +474,9 @@ Many of this was taken from https://github.com/styleguide/ruby, https://github.c
     another comment line
     =end
 
+    # bad
+    #comment without leading whitespace
+
     # good
     # comment line
     # another comment line
@@ -467,6 +500,19 @@ Many of this was taken from https://github.com/styleguide/ruby, https://github.c
     end
     ```
 
+* Do not use `fail`.
+    ```Ruby
+    # bad
+    if password.length < 8
+      fail "Password too short"
+    end
+
+    # good
+    if password.length < 8
+      raise "Password too short"
+    end
+    ```
+
 ## Rails
 
 * Do not use `refute`.
@@ -476,4 +522,16 @@ Many of this was taken from https://github.com/styleguide/ruby, https://github.c
 
     # good
     assert !valid?
+    ```
+
+* Use underscore for HTML IDs
+    ```Ruby
+    # bad
+    <input id="foo-bar" />
+
+    # bad
+    <input id="fooBar" />
+
+    # good
+    <input id="foo_bar" />
     ```
