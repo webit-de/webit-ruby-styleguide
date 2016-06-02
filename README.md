@@ -535,3 +535,13 @@ Many of this was taken from https://github.com/styleguide/ruby, https://github.c
     # good
     <input id="foo_bar" />
     ```
+* Use `presence` instead of `present?` if possible
+    ```Ruby
+    # bad
+    state = params[:state] if params[:state].present?
+    country = params[:country] if params[:country].present?
+    region = state || country || 'US'
+
+    # good
+    region = params[:state].presence || params[:country].presence || 'US'
+    ```
