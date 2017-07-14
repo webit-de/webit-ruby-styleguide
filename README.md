@@ -545,3 +545,25 @@ Many of this was taken from https://github.com/styleguide/ruby, https://github.c
     # good
     region = params[:state].presence || params[:country].presence || 'US'
     ```
+    
+* Use lambdas instead of strings for `assert_difference` and `assert_no_difference` (and `assert_changes`/`assert_no_changes` in Rails 5.1)
+
+    ```Ruby
+      # bad (no code highlight, no inspections etc.)
+      should 'filter old news when wanted' do
+        assert_difference 'News.count' do
+          assert_no_difference 'News.just_new.count' do
+            News.create(published_at: 6.months.ago - 1.day)
+          end
+        end
+      end
+      
+      # good
+      should 'filter old news when wanted' do
+        assert_difference -> { News.count } do
+          assert_no_difference -> { News.just_new.count } do
+            News.create(published_at: 6.months.ago - 1.day)
+          end
+        end
+      end
+     ```
