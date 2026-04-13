@@ -4,7 +4,7 @@ Many of this was taken from https://github.com/styleguide/ruby, https://github.c
 
 ## Conventions
 
-* Use 2 **spaces** no tabs.
+* Use 2 **spaces** and no tabs.
 
 * Never leave trailing whitespace.
 
@@ -43,19 +43,13 @@ Many of this was taken from https://github.com/styleguide/ruby, https://github.c
     "foo#{bar}"
     ```
 
-* Use single-quoted strings, unless the double-quoted are needed (e.g. need string interpolation or special symbols such as `\t`, `\n`, `'`, etc.)
+* Use double-quoted strings.
     ```Ruby
     # bad
-    "foobar"
-
-    # good
     'foobar'
 
     # good
-    "'foo'\n'bar'"
-
-    # good
-    "foo #{bar}"
+    "foobar"
     ```
 
 * Large numeric literals.
@@ -70,7 +64,7 @@ Many of this was taken from https://github.com/styleguide/ruby, https://github.c
 * Avoid the use of `!!`.
     ```Ruby
     # bad
-    x = 'test'
+    x = "test"
     # obscure nil check
     if !!x
       # body omitted
@@ -81,7 +75,7 @@ Many of this was taken from https://github.com/styleguide/ruby, https://github.c
     !!x # => false
 
     # good
-    x = 'test'
+    x = "test"
     unless x.nil?
       # body omitted
     end
@@ -110,17 +104,17 @@ Many of this was taken from https://github.com/styleguide/ruby, https://github.c
     ```Ruby
     # bad
     if condition
-      result = 'foo'
+      result = "foo"
     else
-      result = 'bar'
+      result = "bar"
     end
 
     # good
     result =
       if condition
-        'foo'
+        "foo"
       else
-        'bar'
+        "bar"
       end
     ```
 
@@ -186,19 +180,19 @@ Many of this was taken from https://github.com/styleguide/ruby, https://github.c
     ```Ruby
     kind =
       case foo
-      when 'bar'
-        'foobar'
-      when 'foo'
-        'foofoo'
+      when "bar"
+        "foobar"
+      when "foo"
+        "foofoo"
       else
-        'foo'
+        "foo"
       end
     ```
 
 * The `and` and `or` keywords are banned. Always use  `&&`  and `||` instead!
     ```Ruby
     # because of:
-    foo = 'ThisIsNotABoolean'
+    foo = "ThisIsNotABoolean"
     bar = false
     result = foo and bar
     # => 'ThisIsNotABoolean'
@@ -207,16 +201,18 @@ Many of this was taken from https://github.com/styleguide/ruby, https://github.c
     # => false
     ```
 
-*  Method defininitions and calls
+*  Method defininitions:
     ```Ruby
     # bad
-    object.method arg
+    def my_method arg
+    end
 
     # good
-    object.method(arg)
+    def my_method(arg)
+    end
     ```
 
-*  Method defininitions and calls: brackets around parameters are not necessary. If no brackets are used new lines should be indented with 4 spaces.
+*  Method calls: parantheses around parameters are not necessary. If the argument list of a method call spans more than one line, parantheses are mandatory.
     ```Ruby
     # good
     object.method arg
@@ -227,10 +223,11 @@ Many of this was taken from https://github.com/styleguide/ruby, https://github.c
       arg4, arg5, arg6
 
     # good
-    object.method arg1, arg2, arg3,
-        arg4, arg5, arg6
+    object.method(arg1, arg2, arg3,
+      arg4, arg5, arg6
+    )
     ```
-* Multi-line method chaining: put points at the end of lines and methods on new lines. If using any newlines put every method to a new line
+* Multi-line method chaining: put points at the end of lines and methods on new lines. If using any newlines put every method to a new line.
     ```Ruby
     # bad
     foo.bar.qux
@@ -280,19 +277,27 @@ Many of this was taken from https://github.com/styleguide/ruby, https://github.c
 * Many arguments in method definition
     ```Ruby
     # bad
-    def foobarqux(text, small_text: nil, text_class: nil, no_text: (text.blank? && small_text.blank?), extra_content: nil, icon: nil, color_type: :default, large_button: large_button_default?, no_button: false, icon_only: false, icon_position: :left, disabled: false, text_icon_space: (no_button ? '' : ' ').html_safe, **options)
+    def foobarqux(text, small_text: nil, text_class: nil, no_text: (text.blank? && small_text.blank?), extra_content: nil, icon: nil, color_type: :default, large_button: large_button_default?, no_button: false, icon_only: false, icon_position: :left, disabled: false, text_icon_space: (no_button ? "" : " ").html_safe, **options)
       # ...
     end
 
     # good
-    def foobarqux(text,
-          small_text: nil, text_class: nil,
-          no_text: (text.blank? && small_text.blank?),
-          extra_content: nil,
-          large_button: large_button_default?,
-          icon_position: :left, disabled: false,
-          text_icon_space: (no_button ? '' : ' '),
-          **options)
+    def foobarqux(
+      text,
+      small_text: nil,
+      text_class: nil,
+      no_text: text.blank? && small_text.blank?,
+      extra_content: nil,
+      icon: nil,
+      color_type: :default,
+      large_button: large_button_default?,
+      no_button: false,
+      icon_only: false,
+      icon_position: :left,
+      disabled: false,
+      text_icon_space: (no_button ? "" : " ").html_safe,
+      **options
+    )
       # ...
     end
     ```
@@ -300,17 +305,17 @@ Many of this was taken from https://github.com/styleguide/ruby, https://github.c
   ```Ruby
   # bad (ok for ruby < 2.0)
   def foo(options = {})
-    bar = options.fetch(:bar, 'default')
+    bar = options.fetch(:bar, "default")
     puts bar
   end
 
   # good
-  def foo(bar: 'default')
+  def foo(bar: "default")
     puts bar
   end
 
-  # foo => 'default'
-  # foo(bar: 'baz') => 'baz'
+  # foo => "default"
+  # foo(bar: "baz") => "baz"
   ```  
 
 * Long argument line in method call
@@ -321,14 +326,12 @@ Many of this was taken from https://github.com/styleguide/ruby, https://github.c
     end
 
     # good
-    simple_form_for(@object,
+    simple_form_for(
+      @object,
       url: long_route_method_path,
       html: {
-        class: 'form-horizontal', multipart: true,
-        data: {
-          data: :data, another_data: another_data,
-          some_more_data: some_more_data
-        }
+        class: "form-horizontal", multipart: true,
+        data: { data: :data, another_data: another_data, some_more_data: some_more_data }
       }
     ) do |f|
       # ...
@@ -337,44 +340,46 @@ Many of this was taken from https://github.com/styleguide/ruby, https://github.c
 
     ```Ruby
     # bad
-    create(:user, :user => build(:user, :email => 'user@webit.de',
-                                 :password => 'password',
-                                 :password_confirmation => 'password'))
+    create(:user, :user => build(:user, :email => "user@webit.de",
+                                 :password => "password",
+                                 :password_confirmation => "password"))
 
     # good
-    create(:user,
+    create(
+      :user,
       user:
-        build(:user,
-          email: 'user@webit.de',
-          password: 'password',
-          password_confirmation: 'password'
+        build(
+          :user,
+          email: "user@webit.de",
+          password: "password",
+          password_confirmation: "password"
         )
     )
 
     # bad
-    Mailer.deliver(to: 'bob@example.com', from: 'us@example.com', subject: 'Important message', body: source.text)
+    Mailer.deliver(to: "bob@example.com", from: "us@example.com", subject: "Important message", body: source.text)
 
     # good
     Mailer.deliver(
-      to: 'bob@example.com',
-      from: 'us@example.com',
-      subject: 'Important message',
+      to: "bob@example.com",
+      from: "us@example.com",
+      subject: "Important message",
       body: source.text
     )
 
     # bad
     pdf.invoice_info(infos: {
-        'user_name' => user_name,
-        'invoice_number' => invoice_number,
-        'customer_number' => customer_number
+        "user_name" => user_name,
+        "invoice_number" => invoice_number,
+        "customer_number" => customer_number
     })
 
     # good
     pdf.invoice_info(
       infos: {
-        'user_name' => user_name,
-        'invoice_number' => invoice_number,
-        'customer_number' => customer_number
+        "user_name" => user_name,
+        "invoice_number" => invoice_number,
+        "customer_number" => customer_number
       }
     )
     ```
@@ -446,24 +451,24 @@ Many of this was taken from https://github.com/styleguide/ruby, https://github.c
     hash = { one: 1, two: 2, three: 3 }
 
     # since ruby 2.2 we can create a hash like this:
-    hash = { 'one': 1, 'two': 2, 'three': 3 }
+    hash = { "one": 1, "two": 2, "three": 3 }
     # but keep in mind:
     hash[:one]
     => 1
-    hash['one']
+    hash["one"]
     => nil
 
     ```
 
-* Favor the use of Array#join over the fairly cryptic Array# with a string argument.
+* Favor the use of Array#join over the fairly cryptic `Array#*` with a string argument.
     ```Ruby
     # bad
-    %w(one two three) * ', '
-    # => 'one, two, three'
+    %w(one two three) * ", "
+    # => "one, two, three"
 
     # good
-    %w(one two three).join(', ')
-    # => 'one, two, three'
+    %w(one two three).join(", ")
+    # => "one, two, three"
     ```
 
 * Comments
@@ -491,8 +496,8 @@ Many of this was taken from https://github.com/styleguide/ruby, https://github.c
     #
     # Examples
     #
-    #   multiplex('Tom', 4)
-    #   # => 'TomTomTomTom'
+    #   multiplex("Tom", 4)
+    #   # => "TomTomTomTom"
     #
     # Returns the duplicated String.
     def multiplex(text, count)
@@ -521,7 +526,7 @@ Many of this was taken from https://github.com/styleguide/ruby, https://github.c
     refute valid?
 
     # good
-    assert !valid?
+    assert_not valid?
     ```
 
 * Use underscore for HTML IDs
@@ -540,26 +545,26 @@ Many of this was taken from https://github.com/styleguide/ruby, https://github.c
     # bad
     state = params[:state] if params[:state].present?
     country = params[:country] if params[:country].present?
-    region = state || country || 'US'
+    region = state || country || "US"
 
     # good
-    region = params[:state].presence || params[:country].presence || 'US'
+    region = params[:state].presence || params[:country].presence || "US"
     ```
     
-* Use lambdas instead of strings for `assert_difference` and `assert_no_difference` (and `assert_changes`/`assert_no_changes` in Rails 5.1)
+* Use lambdas instead of strings for `assert_difference` and `assert_no_difference` (and `assert_changes`/`assert_no_changes` as of Rails 5.1)
 
     ```Ruby
       # bad (no code highlight, no inspections etc.)
-      should 'filter old news when wanted' do
-        assert_difference 'News.count' do
-          assert_no_difference 'News.just_new.count' do
+      should "filter old news when wanted" do
+        assert_difference "News.count" do
+          assert_no_difference "News.just_new.count" do
             News.create(published_at: 6.months.ago - 1.day)
           end
         end
       end
       
       # good
-      should 'filter old news when wanted' do
+      should "filter old news when wanted" do
         assert_difference -> { News.count } do
           assert_no_difference -> { News.just_new.count } do
             News.create(published_at: 6.months.ago - 1.day)
